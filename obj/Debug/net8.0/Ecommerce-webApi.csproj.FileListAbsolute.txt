@@ -31,3 +31,4 @@ F:\will\anisulAPI\Ecommerce-webApi\obj\Debug\net8.0\refint\Ecommerce-webApi.dll
 F:\will\anisulAPI\Ecommerce-webApi\obj\Debug\net8.0\Ecommerce-webApi.pdb
 F:\will\anisulAPI\Ecommerce-webApi\obj\Debug\net8.0\Ecommerce-webApi.genruntimeconfig.cache
 F:\will\anisulAPI\Ecommerce-webApi\obj\Debug\net8.0\ref\Ecommerce-webApi.dll
+F:\will\anisulAPI\Ecommerce-webApi\obj\Debug\net8.0\Ecommerce-webApi.sourcelink.json

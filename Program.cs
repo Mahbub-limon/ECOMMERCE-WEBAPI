@@ -1,44 +1,37 @@
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddEndpointsApiExplorer(); //for generating swagger tools
+builder.Services.AddSwaggerGen(); //generate sawagger documentation
 
-var app = builder.Build();
+var app = builder.Build(); 
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+if(app.Environment.IsDevelopment()){
+    app.UseSwagger();  //its a middleware
+    app.UseSwaggerUI();  //showing swagger UI
+
 }
-
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+app.MapGet("/",() =>{
+return "Api is working fine";
+});
+app.MapGet("/hello",() =>{
+return "Get method";
+});
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+
+app.MapPost("/hello",() =>{
+    return "this is post method";
+});
+ 
+ app.MapPut("/hello",() =>{
+    return "put method :hello";
+ });
+
+ app.MapDelete("/hello",() =>{
+    return "Delete method :hello";
+ });
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
