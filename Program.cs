@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc.ApplicationParts;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers();  //Add services to the controller
 builder.Services.AddEndpointsApiExplorer(); //for generating swagger tools
 builder.Services.AddSwaggerGen(); //generate sawagger documentation
 
@@ -13,25 +14,8 @@ if(app.Environment.IsDevelopment()){
 
 }
 app.UseHttpsRedirection();
+app.MapGet("/",() => "Api is working fine");
 
-app.MapGet("/",() =>{
-return "Api is working fine";
-});
-app.MapGet("/hello",() =>{
-return "Get method";
-});
-
-
-app.MapPost("/hello",() =>{
-    return "this is post method";
-});
- 
- app.MapPut("/hello",() =>{
-    return "put method :hello";
- });
-
- app.MapDelete("/hello",() =>{
-    return "Delete method :hello";
- });
-
+app.MapControllers();
 app.Run();
+

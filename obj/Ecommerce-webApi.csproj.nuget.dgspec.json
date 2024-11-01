@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "F:\\will\\anisulApi\\Ecommerce-webApi\\Ecommerce-webApi.csproj": {}
+    "F:\\will\\anisulAPI\\Ecommerce-webApi\\Ecommerce-webApi.csproj": {}
   },
   "projects": {
-    "F:\\will\\anisulApi\\Ecommerce-webApi\\Ecommerce-webApi.csproj": {
+    "F:\\will\\anisulAPI\\Ecommerce-webApi\\Ecommerce-webApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\will\\anisulApi\\Ecommerce-webApi\\Ecommerce-webApi.csproj",
+        "projectUniqueName": "F:\\will\\anisulAPI\\Ecommerce-webApi\\Ecommerce-webApi.csproj",
         "projectName": "Ecommerce-webApi",
-        "projectPath": "F:\\will\\anisulApi\\Ecommerce-webApi\\Ecommerce-webApi.csproj",
+        "projectPath": "F:\\will\\anisulAPI\\Ecommerce-webApi\\Ecommerce-webApi.csproj",
         "packagesPath": "C:\\Users\\mahbu\\.nuget\\packages\\",
-        "outputPath": "F:\\will\\anisulApi\\Ecommerce-webApi\\obj\\",
+        "outputPath": "F:\\will\\anisulAPI\\Ecommerce-webApi\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -78,7 +78,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
