@@ -43,15 +43,10 @@ namespace Ecommerce_webApi.Models.Controllers
         [HttpPost]
         public IActionResult CreateCategory([FromBody] CategoryCrieateDto categoryData)
         {
-            if(string.IsNullOrEmpty(categoryData.Name))
+            if(!ModelState.IsValid) //Data annotation
             {
-                return BadRequest("Category Name is required and can not be empty");
+                return BadRequest("Invalid Data");
             }
-            if(categoryData.Name.Length < 2)
-            {
-                return BadRequest("Category name must be atleast 2 characters long ");
-            }
-
             var newCategory = new Category
             {
                 CategoryId = Guid.NewGuid(),
