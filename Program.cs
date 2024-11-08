@@ -1,15 +1,37 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//Data annotation
-builder.Services.AddControllers().ConfigureApiBehaviorOptions(Options => //ConfigureApiBehaviorOptions = opening api behavior optins
-{
-  Options.SuppressModelStateInvalidFilter = true;  //Disable automatic model validation response
-});
 
 builder.Services.AddControllers();  //Add services to the controller
+
+// doing configure . api behaviour configure
+builder.Services.Configure<ApiBehaviorOptions>(Options => {
+  Options.InvalidModelStateResponseFactory = context => {
+   var errors = context.ModelState
+               .Where(e => e.Value != null && e.Value.Errors.Count > 0)
+               .Select(e => new    //all errors is came out by select
+               {
+                Field = e.Key,     //where is error(Key)
+                Errors = e.Value != null ? e.Value.Errors.Select(x => x.
+                ErrorMessage).ToArray() : new string[0]
+               }).ToList();
+
+                var errorString = string.Join(";", errors.Select(e 
+                => $"{e.Field}: {string.Join(",",e.Errors)}"));            
+
+               return new BadRequestObjectResult(new 
+               {
+                Message = "validation failed",
+                Error = errorString
+               });
+       };
+});
+
+
+
 builder.Services.AddEndpointsApiExplorer(); //for generating swagger tools
 builder.Services.AddSwaggerGen(); //generate sawagger documentation
 

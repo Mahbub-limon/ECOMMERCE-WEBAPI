@@ -18,13 +18,6 @@ namespace Ecommerce_webApi.Models.Controllers
        [HttpGet]
         public IActionResult GetCategories([FromQuery] string searchValue = "")   // "I" is the interface before ActionResult// this is made of getRequest
        { 
-                // if(!string.IsNullOrEmpty(searchValue))
-                // {
-                //     var SearchedCategories = categories.Where(c => c.Name.Contains(searchValue,StringComparison.OrdinalIgnoreCase)).ToList();
-                //     return Ok(SearchedCategories);
-                // }
-                
-
                 var categoryList = categories.Select(c => new CategoryReadDto //follow CategoryReadDto pattarn
                 {
                     categoryId = c.CategoryId,
@@ -43,10 +36,7 @@ namespace Ecommerce_webApi.Models.Controllers
         [HttpPost]
         public IActionResult CreateCategory([FromBody] CategoryCrieateDto categoryData)
         {
-            if(!ModelState.IsValid) //Data annotation
-            {
-                return BadRequest("Invalid Data");
-            }
+        
             var newCategory = new Category
             {
                 CategoryId = Guid.NewGuid(),
