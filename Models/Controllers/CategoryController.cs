@@ -26,7 +26,7 @@ namespace Ecommerce_webApi.Models.Controllers
                     CreateAdt = c.CreateAdt
                 }).ToList(); //Convert ToList();
 
-            return Ok(categoryList);
+            return Ok(ApiReponse<List<CategoryReadDto>>.SuccessResponse(categoryList,200,"Category returned successgully"));
         }
 
 #endregion
@@ -51,11 +51,28 @@ namespace Ecommerce_webApi.Models.Controllers
                 Description = newCategory.Description,
                 CreateAdt = newCategory.CreateAdt
             };
-            return Created($"/api/categories/{newCategory.CategoryId}",categoryReadDto);
+            return Created($"/api/categories/{newCategory.CategoryId}",ApiReponse<CategoryReadDto>.SuccessResponse(categoryReadDto,201,"Categeories Created successfully"));
         }
            #endregion
-
-        #region  MapDelete
+     
+        #region MapPut
+      //put : /api / categories/{categoryId} => update a category
+      [HttpPut("{categoryId:guid}")]
+      public IActionResult UpdateCategoryById(Guid categoryId,[FromBody] CategoryUpdateDto categoryData)
+      {
+        var foundCategory = categories.FirstOrDefault(Category => Category.CategoryId == categoryId);
+        if(foundCategory == null)
+        {
+            return NotFound("Category with this id does not exist");
+        }
+                foundCategory.Name = categoryData.Name;
+                foundCategory.Description = categoryData.Description;
+               
+                return Ok(ApiReponse<object>.SuccessResponse(null,204,"Category Update successfully"));
+      }
+        #endregion
+    
+        #region  MapDelete   
         //Delete:/api/cagegories/{categoryId} => Delete a category by Id
         [HttpDelete("{categoryId:guid}")]
         public IActionResult DeleteCategoryById(Guid categoryId)
@@ -66,44 +83,10 @@ namespace Ecommerce_webApi.Models.Controllers
            {
                 return NotFound("Category with this id does not exist");
            }
-           categories.Remove(foundCategory);
-           return NoContent();
+           categories.Remove(foundCategory);      
+           return Ok(ApiReponse<object>.SuccessResponse(null,204,"Category deleted successfully"));
         }
          #endregion
-     
-        #region MapPut
-      //put : /api / categories/{categoryId} => update a category
-      [HttpPut("{categoryId:guid}")]
-      public IActionResult UpdateCategoryById(Guid categoryId,[FromBody] CategoryUpdateDto categoryData)
-      {
-        if(categoryData == null)
-        {
-            return BadRequest("Category data is missing");
-        }
-
-        var foundCategory = categories.FirstOrDefault(Category => Category.CategoryId == categoryId);
-        if(foundCategory == null)
-        {
-            return NotFound("Category with this id does not exist");
-        }
-        if(!string.IsNullOrEmpty(categoryData.Name))
-        {
-            if(categoryData.Name.Length >= 2)
-            {
-                foundCategory.Name = categoryData.Name;
-            }
-            else
-            {
-              return BadRequest("Category name must be atleast 2 characters long");
-            }
-        }
-        if(!string.IsNullOrWhiteSpace(categoryData.Description))
-        {
-            foundCategory.Description = categoryData.Description;
-        }
-        return NoContent();
-      }
-        #endregion
     }
   
 }
