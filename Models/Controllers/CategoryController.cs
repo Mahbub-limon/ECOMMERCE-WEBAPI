@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 using Ecommerce_webApi.DTOs;
 using Microsoft.AspNetCore.Mvc; //ControllerBase
@@ -56,6 +57,7 @@ namespace Ecommerce_webApi.Models.Controllers
            #endregion
      
         #region MapPut
+
       //put : /api / categories/{categoryId} => update a category
       [HttpPut("{categoryId:guid}")]
       public IActionResult UpdateCategoryById(Guid categoryId,[FromBody] CategoryUpdateDto categoryData)
@@ -63,7 +65,8 @@ namespace Ecommerce_webApi.Models.Controllers
         var foundCategory = categories.FirstOrDefault(Category => Category.CategoryId == categoryId);
         if(foundCategory == null)
         {
-            return NotFound("Category with this id does not exist");
+            return NotFound(ApiReponse<object>.ErrorResponse(new List<string>
+            {"Category with this ID does not exist"},404,"validation failed"));
         }
                 foundCategory.Name = categoryData.Name;
                 foundCategory.Description = categoryData.Description;
@@ -81,7 +84,7 @@ namespace Ecommerce_webApi.Models.Controllers
 
            if(foundCategory == null)
            {
-                return NotFound("Category with this id does not exist");
+               return NotFound(ApiReponse<object>.ErrorResponse(new List<string> {"Category with this ID does not exist "},404,"validation failed"));
            }
            categories.Remove(foundCategory);      
            return Ok(ApiReponse<object>.SuccessResponse(null,204,"Category deleted successfully"));
