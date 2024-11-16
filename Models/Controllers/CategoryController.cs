@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Ecommerce_webApi.DTOs;
-using Microsoft.AspNetCore.Mvc; //ControllerBase
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApiExplorer; //ControllerBase
 
 namespace Ecommerce_webApi.Models.Controllers
 {
@@ -29,13 +31,36 @@ namespace Ecommerce_webApi.Models.Controllers
 
             return Ok(ApiReponse<List<CategoryReadDto>>.SuccessResponse(categoryList,200,"Category returned successgully"));
         }
+        #endregion
 
-#endregion
+        //GET: /api/categories/{categoryId} => Read a category by Id
+        [HttpGet("{categoryId:guid}")]
+        public IActionResult GetCategoryById(Guid categoryId)
+            {
+                var foundCategory = categories.FirstOrDefault(c => c.CategoryId == categoryId);
+
+                if(foundCategory == null)
+                {
+                    return NotFound(ApiReponse<object>.ErrorResponse(new List<string>
+                    {"Category with this ID does not exist"},404,"validation failed"));
+                }
+
+                var categoryReadDto  = new CategoryReadDto
+                {
+                    categoryId = foundCategory.CategoryId,
+                    Name = foundCategory.Name,
+                    Description = foundCategory.Description,
+                    CreateAdt = foundCategory.CreateAdt
+                };
+
+
+                return Ok(ApiReponse<CategoryReadDto>.SuccessResponse(categoryReadDto,200,"Categories is returned successfully"));
+        
 
         #region MapPost
         //POST::: /api/categories => Create a category
         [HttpPost]
-        public IActionResult CreateCategory([FromBody] CategoryCrieateDto categoryData)
+         public  IActionResult CreateCategory([FromBody] CategoryCrieateDto categoryData)
         {
         
             var newCategory = new Category
@@ -89,7 +114,9 @@ namespace Ecommerce_webApi.Models.Controllers
            categories.Remove(foundCategory);      
            return Ok(ApiReponse<object>.SuccessResponse(null,204,"Category deleted successfully"));
         }
-         #endregion
+       
+        }
+          #endregion
+
     }
-  
 }
