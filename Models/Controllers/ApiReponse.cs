@@ -31,7 +31,7 @@ namespace Ecommerce_webApi.Models.Controllers
     }
 
  //static method for creating an error response
- public static ApiReponse<T> ErrorResponse(List<string>errors,int statusCode,string message =" ")
+ public static ApiReponse<T> ErrorResponse(List<string>errors,int statusCode,string message = " ")
  {
     return new ApiReponse<T>(false,message,default(T),errors,statusCode);
  }

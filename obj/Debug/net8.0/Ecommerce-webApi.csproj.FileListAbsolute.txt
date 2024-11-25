@@ -32,3 +32,6 @@ F:\will\anisulAPI\Ecommerce-webApi\obj\Debug\net8.0\Ecommerce-webApi.pdb
 F:\will\anisulAPI\Ecommerce-webApi\obj\Debug\net8.0\Ecommerce-webApi.genruntimeconfig.cache
 F:\will\anisulAPI\Ecommerce-webApi\obj\Debug\net8.0\ref\Ecommerce-webApi.dll
 F:\will\anisulAPI\Ecommerce-webApi\obj\Debug\net8.0\Ecommerce-webApi.sourcelink.json
+F:\will\anisulAPI\Ecommerce-webApi\bin\Debug\net8.0\Ecommerce-webApi.staticwebassets.endpoints.json
+F:\will\anisulAPI\Ecommerce-webApi\obj\Debug\net8.0\staticwebassets.build.endpoints.json
+F:\will\anisulAPI\Ecommerce-webApi\obj\Debug\net8.0\staticwebassets\msbuild.Ecommerce-webApi.Microsoft.AspNetCore.StaticWebAssetEndpoints.props

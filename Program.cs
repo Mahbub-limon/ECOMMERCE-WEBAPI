@@ -1,12 +1,14 @@
 using System.IO.Compression;
 using Ecommerce_webApi.Models.Controllers;
+using Ecommerce_webApi.Models.Controllers.Interfaces;
+using Ecommerce_webApi.Models.Controllers.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+builder.Services.AddScoped<ICategoryService,CategoryService>(); 
 builder.Services.AddControllers();  //Add services to the controller
 
 // doing configure . api behaviour configure
