@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<ICategoryService,CategoryService>(); 
 builder.Services.AddControllers();  //Add services to the controller
 
