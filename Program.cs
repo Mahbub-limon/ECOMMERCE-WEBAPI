@@ -2,14 +2,22 @@ using System.IO.Compression;
 using Ecommerce_webApi.Models.Controllers;
 using Ecommerce_webApi.Models.Controllers.Interfaces;
 using Ecommerce_webApi.Models.Controllers.Services;
+using Ecommerce_webApi.Models.data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<ICategoryService,CategoryService>(); 
+
+//database context adding(AddDbContext)
+//UseSqlServer = connecting app to database
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddControllers();  //Add services to the controller
 
 // doing configure . api behaviour configure
