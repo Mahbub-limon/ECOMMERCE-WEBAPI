@@ -25,18 +25,19 @@ namespace Ecommerce_webApi.Models.Controllers.Services
             _mapper = mapper;
         }
 
-        //Model <==> DTO
-         public async Task<CategoryReadDto? > GetAllCategories()   //all category replayed
+        //Context (Application -> Context -> Database)
+         public async Task<CategoryReadDto> GetAllCategories()   //all category replayed
          {  
 
             var categories = await _appDbContext.Categories.ToListAsync();  //searching data to database
 
             return _mapper.Map<List<CategoryReadDto>>(categories);  //Converting _categories to CategoryRedDTO
+            
         }
 
          public async Task<CategoryReadDto?> GetCategoryById(Guid categoryId)
          {
-            var foundCategory =await  _appDbContext.Categories.FirstOrDefault(c => c.CategoryId == categoryId);
+            var foundCategory =await  _appDbContext.Categories.FindAsync(categoryId);
 
         return foundCategory == null ? null : _mapper.Map<CategoryReadDto>(foundCategory);
             
@@ -56,7 +57,7 @@ namespace Ecommerce_webApi.Models.Controllers.Services
     }
     public async Task<CategoryReadDto ?> UpdateCategoryById(Guid categoryId, CategoryUpdateDto categoryData)
     {
-        var foundCategory = await _appDbContext.Categories.FirstOrDefault(Category => Category.CategoryId == categoryId);
+        var foundCategory = await _appDbContext.Categories.FindAsync(categoryId);
 
         if(foundCategory == null)
         {
@@ -64,23 +65,23 @@ namespace Ecommerce_webApi.Models.Controllers.Services
         }
             
             //CategoryUpdateDto => Category
-            _mapper.Map(categoryData,foundCategory); //Convertting categoryData to foundCategory
+             _mapper.Map(categoryData,foundCategory); //Convertting categoryData to foundCategory
+             _appDbContext.Categories.Update(foundCategory);
             await _appDbContext.SaveChangesAsync();
-
             return _mapper.Map<CategoryReadDto>(foundCategory);
     }
 
-            public bool DeleteCategoryById(Guid categoryId)
+            public async Task<bool> DeleteCategoryById(Guid categoryId)
             {
-                var foundCategory = _categories.FirstOrDefault(category => category.
-                CategoryId == categoryId);
+                var foundCategory = await _appDbContext.Categories.FindAsync(categoryId);
 
                 if(foundCategory == null)
                 {
                     return false;
                 }
 
-                _categories.Remove(foundCategory);
+                _appDbContext.Categories.Remove(foundCategory);
+                await _appDbContext.SaveChangesAsync();
                 return true;
             }
     }
