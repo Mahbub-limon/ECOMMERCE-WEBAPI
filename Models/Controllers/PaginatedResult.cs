@@ -8,11 +8,9 @@ namespace Ecommerce_webApi.Models.Controllers
     public class PaginatedResult<T>
     {
         public IEnumerable<T> Items {get ; set; } = new List<T>();
-
         public int TotalCount {get ; set;}
-
         public int PageNumber {get ; set;}
-        public int pageSize {get ; set;}
-
+        public int pageSize {get ; set;}  
+        public int TotalPages => (int)Math.Ceiling((double)TotalCount / pageSize);
     }
 }
