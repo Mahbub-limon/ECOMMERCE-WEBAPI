@@ -26,13 +26,24 @@ namespace Ecommerce_webApi.Models.Controllers.Services
         }
 
         //Context (Application -> Context -> Database)
-         public async Task<CategoryReadDto> GetAllCategories()   //all category replayed
+         public async Task<PaginatedResult<CategoryReadDto>> GetAllCategories(int pageNumber,int pageSize)   //all category replayed
          {  
+            IQueryable<Category> query = _appDbContext.Categories;
 
-            var categories = await _appDbContext.Categories.ToListAsync();  //searching data to database
+            //get total count
+            var totalCount = await query.CountAsync();
 
-            return _mapper.Map<List<CategoryReadDto>>(categories);  //Converting _categories to CategoryRedDTO
+            //pagination,pageNumber = 3 ,pageSize = 5
+            //20 categories
+            //skip ((pageNumber -1)* pageSize).Take(pageSize)
+            var items = await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            var results = _mapper.Map<List<CategoryReadDto>>(items);  //Converting _categories to CategoryRedDTO
             
+            return new PaginatedResult<CategoryReadDto>
+            {
+
+            }
         }
 
          public async Task<CategoryReadDto?> GetCategoryById(Guid categoryId)

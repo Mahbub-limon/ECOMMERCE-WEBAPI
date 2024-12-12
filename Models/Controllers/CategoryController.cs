@@ -25,12 +25,12 @@ namespace Ecommerce_webApi.Models.Controllers
         }
 
         #region  MapGet
-       //GET :/api/categories => Read categories
+       //GET :/api/categories?pageNumber=2&& pageSize =5  
        [HttpGet]
-         public Task<IActionResult> GetCategories()  
+         public async Task<IActionResult> GetCategories([FromQuery] int pageNumber = 1 ,[FromQuery] int pageSize = 6)  
         {
-        var categoryList = await _categoryService.GetAllCategories(); 
-        return Ok(ApiReponse<List<CategoryReadDto>>.SuccessResponse(categoryList,200,"Category returned successgully"));
+        var categoryList = await _categoryService.GetAllCategories(pageNumber,pageSize); 
+        return Ok(ApiReponse<PaginatedResult<CategoryReadDto>>.SuccessResponse(categoryList,200,"Category returned successgully"));
         }
       #endregion
 
