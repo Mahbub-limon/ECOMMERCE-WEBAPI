@@ -27,9 +27,9 @@ namespace Ecommerce_webApi.Models.Controllers
         #region  MapGet
        //GET :/api/categories?pageNumber=2&& pageSize =5  
        [HttpGet]
-         public async Task<IActionResult> GetCategories([FromQuery] int pageNumber = 1 ,[FromQuery] int pageSize = 6)  
+         public async Task<IActionResult> GetCategories([FromQuery] int pageNumber = 1 ,[FromQuery] int pageSize = 6,[FromQuery] string? search = null)  
         {
-        var categoryList = await _categoryService.GetAllCategories(pageNumber,pageSize); 
+        var categoryList = await _categoryService.GetAllCategories(pageNumber,pageSize,search); 
         return Ok(ApiReponse<PaginatedResult<CategoryReadDto>>.SuccessResponse(categoryList,200,"Category returned successgully"));
         }
       #endregion

@@ -26,9 +26,16 @@ namespace Ecommerce_webApi.Models.Controllers.Services
         }
 
         //Context (Application -> Context -> Database)
-         public async Task<PaginatedResult<CategoryReadDto>> GetAllCategories(int pageNumber,int pageSize)   //all category replayed
+         public async Task<PaginatedResult<CategoryReadDto>> GetAllCategories(int pageNumber,int pageSize,string ? search = null)   //all category replayed
          {  
             IQueryable<Category> query = _appDbContext.Categories;
+
+            //search by name or description
+            if(!string.IsNullOrWhiteSpace(search))
+            {
+                var formattedSearch = $"%{search.Trim()}%";
+             query = query.Where(c => EF.Functions.Like(c.Name,formattedSearch) || EF.Functions.Like(c.Description,formattedSearch));
+            }
 
             //get total count
             var totalCount = await query.CountAsync();
@@ -42,8 +49,11 @@ namespace Ecommerce_webApi.Models.Controllers.Services
             
             return new PaginatedResult<CategoryReadDto>
             {
-
-            }
+                Items = results,
+                TotalCount = totalCount,
+                PageNumber = pageNumber,
+                pageSize = pageSize
+            };
         }
 
          public async Task<CategoryReadDto?> GetCategoryById(Guid categoryId)
