@@ -26,7 +26,7 @@ namespace Ecommerce_webApi.Models.Controllers.Services
         }
 
         //Context (Application -> Context -> Database)
-         public async Task<PaginatedResult<CategoryReadDto>> GetAllCategories(int pageNumber,int pageSize,string ? search = null)   //all category replayed
+         public async Task<PaginatedResult<CategoryReadDto>> GetAllCategories(int pageNumber,int pageSize,string ? search = null,string? sortOrder = null)   //all category replayed
          {  
             IQueryable<Category> query = _appDbContext.Categories;
 
