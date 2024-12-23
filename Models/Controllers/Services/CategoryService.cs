@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Ecommerce_webApi.DTOs;
+using Ecommerce_webApi.Enums;
+using Ecommerce_webApi.Helpers;
 using Ecommerce_webApi.Models.Controllers.Interfaces;
 using Ecommerce_webApi.Models.data;
 using Microsoft.EntityFrameworkCore;
@@ -26,17 +28,45 @@ namespace Ecommerce_webApi.Models.Controllers.Services
         }
 
         //Context (Application -> Context -> Database)
-         public async Task<PaginatedResult<CategoryReadDto>> GetAllCategories(int pageNumber,int pageSize,string ? search = null,string? sortOrder = null)   //all category replayed
-         {  
+         public async Task<PaginatedResult<CategoryReadDto>> GetAllCategories(QueryParameters queryParameters)   //all category replayed
+         { 
+            //Decompose the queryParameters into local variable
+            var pageNumber = queryParameters.pageNumber; 
+            var pageSize = queryParameters.PageSize;
+            var search = queryParameters.Search;
+            var sortOrder = queryParameters.sortOrder;
+
             IQueryable<Category> query = _appDbContext.Categories;
 
             //search by name or description
             if(!string.IsNullOrWhiteSpace(search))
-            {
+            { 
                 var formattedSearch = $"%{search.Trim()}%";
              query = query.Where(c => EF.Functions.Like(c.Name,formattedSearch) || EF.Functions.Like(c.Description,formattedSearch));
             }
 
+            //sorting
+            if(string.IsNullOrWhiteSpace(sortOrder))
+            {
+                query = query.OrderBy(c => c.Name);
+            }
+            else
+            {
+                var formattedSortOrder = sortOrder.Trim().ToLower();
+
+                if (Enum.TryParse<SortOrder>(formattedSortOrder,true,out var parsedSortOrder))
+                {
+                query = parsedSortOrder switch
+                {
+                    SortOrder.NameAsc => query.OrderBy( c => c.Name),
+                    SortOrder.NameDesc => query.OrderByDescending( c => c.Name),
+                    SortOrder.CreateAtAsc => query.OrderBy(c => c.CreateAdt),
+                    SortOrder.createdAtDesc => query.OrderByDescending( c => c.CreateAdt),
+                    _ => query.OrderBy(c => c.Name),     //Default sorting for invalid sortOrder
+                };
+                
+            }
+            }
             //get total count
             var totalCount = await query.CountAsync();
 
@@ -69,8 +99,6 @@ namespace Ecommerce_webApi.Models.Controllers.Services
         //CategoryCreateDto  => Category
 
         var newCategory =_mapper.Map<Category>(categoryData);
-        newCategory.CategoryId = Guid.NewGuid();
-        newCategory.Description = categoryData.Description;
         await _appDbContext.Categories.AddAsync(newCategory);  //datga ready for inserting table
         await _appDbContext.SaveChangesAsync(); // finally save in the table
         return _mapper.Map<CategoryReadDto>(newCategory);

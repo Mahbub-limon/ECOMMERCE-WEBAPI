@@ -5,6 +5,7 @@ using System.Reflection.Metadata.Ecma335;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Ecommerce_webApi.DTOs;
+using Ecommerce_webApi.Helpers;
 using Ecommerce_webApi.Models.Controllers.Interfaces;
 using Ecommerce_webApi.Models.Controllers.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -27,9 +28,11 @@ namespace Ecommerce_webApi.Models.Controllers
         #region  MapGet
        //GET :/api/categories?pageNumber=2&& pageSize =5  
        [HttpGet]
-         public async Task<IActionResult> GetCategories([FromQuery] int pageNumber = 1 ,[FromQuery] int pageSize = 6,[FromQuery] string? search = null,[FromQuery] string? sortOrder = null)  
+         public async Task<IActionResult> GetCategories([FromQuery] QueryParameters queryParameters)  
         {
-        var categoryList = await _categoryService.GetAllCategories(pageNumber,pageSize,search); 
+          //validate the query parameters
+        queryParameters.Validate();
+        var categoryList = await _categoryService.GetAllCategories(queryParameters); 
         return Ok(ApiReponse<PaginatedResult<CategoryReadDto>>.SuccessResponse(categoryList,200,"Category returned successgully"));
         }
       #endregion
